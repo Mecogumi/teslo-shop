@@ -3,5 +3,6 @@
   @for (product of productsResource.value()?.products; track product.id) {
   <app-product-card [product]="product"></app-product-card>
   }
-
 </div>
+<app-pagination [pages]="productsResource.value()?.pages??0"
+  [currentPage]="paginationService.currentPage()"></app-pagination>
