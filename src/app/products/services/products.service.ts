@@ -15,13 +15,13 @@ interface Options {
 export class ProductsService {
   private http = inject(HttpClient)
 
-  private productCache = new Map<string, ProductsResponse>()
+  private productCache = new Map<string, ProductsResponse | Product>()
 
   getProducts(options: Options): Observable<ProductsResponse> {
     const { limit = 10, offset = 0, gender = '' } = options;
     const key = `${limit}-${offset}-${gender}`
     if (this.productCache.has(key)) {
-      return of(this.productCache.get(key)!);
+      return of(this.productCache.get(key) as ProductsResponse);
     }
     return this.http.get<ProductsResponse>(`${apiUrl}/products`, {
       params: { limit, offset, gender }
@@ -30,8 +30,13 @@ export class ProductsService {
     )
   }
 
-  getProduct(query: string) {
-    return this.http.get<Product>(`${apiUrl}/products/${query}`)
+  getProduct(query: string): Observable<Product> {
+    if (this.productCache.has(query)) {
+      return of(this.productCache.get(query) as Product)
+    }
+    return this.http.get<Product>(`${apiUrl}/products/${query}`).pipe(
+      tap(resp => this.productCache.set(query, resp))
+    )
   }
 
 }
