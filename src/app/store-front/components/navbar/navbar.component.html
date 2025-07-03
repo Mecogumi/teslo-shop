@@ -24,7 +24,18 @@
 
     </ul>
   </div>
-  <div class="navbar-end">
-    <a class="btn">Button</a>
+  <div class="navbar-end gap-4">
+    @if (authService.authSatus()==='authenticated') {
+    <button class="btn btn-ghost">{{authService.user()?.fullName}}</button>
+    <button class="btn btn-sm btn-error" (click)="authService.logout()">Salir</button>
+    }
+    <!--  -->
+    @else if(authService.authSatus()==='not-authenticated'){
+    <button routerLink="/auth/login" class="btn btn-secondary">Login</button>
+    }
+    <!--  -->
+    @else {
+    <a href="">...</a>
+    }
   </div>
 </div>
