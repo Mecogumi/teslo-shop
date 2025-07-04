@@ -22,7 +22,6 @@ export class ProductPageComponent {
   productResource = rxResource({
     params: () => (this.productSlug()),
     stream: (slug) => {
-      console.log(slug.params)
       return this.productService.getProduct(slug.params)
     }
   })

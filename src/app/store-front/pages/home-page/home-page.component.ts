@@ -27,7 +27,6 @@ export class HomePageComponent {
   productsResource = rxResource({
     params: () => (this.paginationService.currentPage()),
     stream: (res) => {
-      console.log(res.params)
       return this.productsService.getProducts({ offset: (res.params - 1) * 9 });
     }
   })
