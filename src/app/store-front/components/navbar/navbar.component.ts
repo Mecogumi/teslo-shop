@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '@auth/services/auth.service';
-import { Product } from '@products/interfaces/product-response.interface';
 
 @Component({
   selector: 'app-navbar',
@@ -11,4 +10,9 @@ import { Product } from '@products/interfaces/product-response.interface';
 })
 export class NavbarComponent {
   authService = inject(AuthService)
+
+  logout() {
+    this.authService.logout()
+    window.location.reload()
+  }
 }

@@ -83,4 +83,13 @@ export class AuthService {
     this.logout()
     return of(false)
   }
+
+  register(fullName: string, email: string, password: string): Observable<boolean> {
+    return this.http.post<AuthResponse>(`${apiUrl}/auth/register`, {
+      fullName, email, password
+    }).pipe(
+      map(resp => this.handleAuthSucces(resp)),
+      catchError((error: any) => this.handleAuthError(error))
+    )
+  }
 }
