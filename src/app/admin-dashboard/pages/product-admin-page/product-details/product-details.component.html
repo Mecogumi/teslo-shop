@@ -1,0 +1,102 @@
+<h1 class="text-2xl font-bold">{{ product().title }}</h1>
+<div class="divider"></div>
+
+<form [formGroup]="productForm" class="grid grid-cols-1 sm:grid-cols-2   gap-4" (ngSubmit)="onSumbit()">
+  <!-- Datos generales -->
+  <div class="flex flex-col gap-2">
+    <h2 class="text-2xl font-bold h-12">Datos generales</h2>
+    <input [class.border-red-500]="productForm.controls.title.errors" formControlName="title" type="text"
+      placeholder="Título" class="input input-bordered w-full" />
+    @if(productForm.controls.title.errors){
+    <span class="text-error">{{formUtils.getFieldError(productForm, "title")}}</span>
+    }
+
+    <input [class.border-red-500]="productForm.controls.slug.errors" formControlName="slug" type="text"
+      placeholder="Slug" class="input input-bordered w-full" />
+    @if(productForm.controls.slug.errors){
+    <span class="text-error">{{formUtils.getFieldError(productForm, "slug")}}</span>
+    }
+
+
+    <textarea [class.border-red-500]="productForm.controls.description.errors" formControlName="description"
+      class="textarea textarea-bordered" placeholder="Descripción" rows="6"></textarea>
+    @if(productForm.controls.description.errors){
+    <span class="text-error">{{formUtils.getFieldError(productForm, "description")}}</span>
+    }
+
+    <h2 class="text-lg font-bold">Datos de venta</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      <input [class.border-red-500]="productForm.controls.price.errors" formControlName="price" type="number"
+        placeholder="Precio" class="input input-bordered w-full" />
+
+      <input [class.border-red-500]="productForm.controls.stock.errors" formControlName="stock" type="number"
+        placeholder="Inventario" class="input input-bordered w-full" />
+      @if(productForm.controls.price.errors){
+      <span class="text-error">{{formUtils.getFieldError(productForm, "price")}}</span>
+      <span></span>
+      }
+      @if(productForm.controls.stock.errors){
+      <span></span>
+      <span class="text-error">{{formUtils.getFieldError(productForm, "stock")}}</span>
+      }
+
+    </div>
+
+    <!-- tags -->
+    <input [class.border-red-500]="productForm.controls.tags.errors" formControlName="tags" type="text"
+      placeholder="Tags" class="input input-bordered w-full" />
+    @if(productForm.controls.tags.errors){
+    <span class="text-error">{{formUtils.getFieldError(productForm, "tags")}}</span>
+    }
+    <!-- Botones para el género -->
+    <div class="grid grid-cols-4 gap-2">
+      <!-- <button class="btn btn-sm btn-outline">Masculino</button> -->
+      <button (click)="productForm.patchValue({gender: 'men'})" [class.btn-primary]="productForm.value.gender==='men'"
+        type="button" class="btn btn-sm">Masculino</button>
+      <button (click)="productForm.patchValue({gender: 'women'})"
+        [class.btn-accent]="productForm.value.gender==='women'" type="button" class="btn btn-sm ">Femenino</button>
+      <button (click)="productForm.patchValue({gender: 'kids'})" [class.btn-warning]="productForm.value.gender==='kids'"
+        type="button" class="btn btn-sm ">Kids</button>
+      <button (click)="productForm.patchValue({gender: 'unisex'})"
+        [class.btn-secondary]="productForm.value.gender==='unisex'" type="button" class="btn btn-sm ">Unisex</button>
+
+    </div>
+    @if(productForm.controls.gender.errors){
+    <span class="text-error">{{formUtils.getFieldError(productForm, "gender")}}</span>
+    }
+
+    <!-- <select class="select select-bordered w-full">
+      <option value="male">Masculino</option>
+      <option value="female">Femenino</option>
+      <option value="unisex">Unisex</option>
+    </select> -->
+
+    <!-- Sizes -->
+    <div class="grid grid-cols-6 gap-2">
+      @for (size of sizes; track size) {
+      <button (click)="onSizeClicked(size)" [class.btn-outline]="!productForm.value.sizes?.includes(size)"
+        [class.btn-primary]="productForm.value.sizes?.includes(size)" class="btn btn-sm" type="button">{{
+        size }}</button>
+      }
+    </div>
+    @if(productForm.controls.sizes.errors){
+    <span class="text-error">{{formUtils.getFieldError(productForm, "sizes")}}</span>
+    }
+  </div>
+
+  <!-- Imágenes -->
+  <div class="flex flex-col gap-2">
+    <div class="flex justify-end h-12">
+      <button class="btn btn-secondary" type="submit">
+        <!-- <span class="loading loading-spinner loading-sm"></span> -->
+
+        Guardar
+      </button>
+    </div>
+
+    <app-product-carousel [images]="product().images" />
+
+    <input type="file" class="file-input file-input-bordered w-full mt-4" />
+  </div>
+</form>

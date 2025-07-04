@@ -1,0 +1,58 @@
+<div class="overflow-x-auto">
+  <table class="table">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th>
+          <label>
+            <input type="checkbox" class="checkbox" />
+          </label>
+        </th>
+        <th>Titulo</th>
+        <th>Invetario</th>
+        <th>Precio</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- row 1 -->
+      @for (product of products(); track product.id) {
+      <tr>
+        <th>
+          <label>
+            <input type="checkbox" class="checkbox" />
+          </label>
+        </th>
+        <td>
+          <div class="flex items-center gap-3">
+            <div class="avatar">
+              <div class="mask mask-squircle h-12 w-12">
+                <img [src]="product.images |productImage" [alt]="product.title" />
+              </div>
+            </div>
+            <div>
+              <div [routerLink]="[product.id]"
+                class="font-bold hover:link hover:link-accent transition-colors duration-300">
+                {{product.title}}</div>
+              <div class="text-sm opacity-50">{{product.slug}}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          @if (product.stock<=10) { <span class="badge badge-error">{{product.stock}}</span>}
+            @else if (product.stock<=20) { <span class="badge badge-warning">{{product.stock}}</span>}
+              @else {<span class="badge badge-success">{{product.stock}}</span>}
+              <br />
+              @for (size of product.sizes; track size) {
+              <span class="badge badge-ghost badge-sm">{{size}}</span>
+              }
+        </td>
+        <td>{{product.price |currency}}</td>
+        <th>
+          <a class="btn btn-ghost text-accent btn-xs" [routerLink]="[product.id]">Detalles</a>
+        </th>
+      </tr>
+      }
+
+  </table>
+</div>

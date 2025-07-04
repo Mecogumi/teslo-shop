@@ -14,12 +14,15 @@
       "@shared/*": [
         "./src/app/shared/*"
       ],
-      "@store-front": [
+      "@store-front/*": [
         "./src/app/store-front/*"
       ],
-      "@dashboard": [
+      "@dashboard/*": [
         "./src/app/admin-dashboard/*"
       ],
+      "@utils/*": [
+        "./src/app/utils/*"
+      ]
     },
     "strict": true,
     "noImplicitOverride": true,

@@ -32,7 +32,7 @@ export class AuthService {
   })
 
   user = computed<User | null>(() => this._user());
-
+  isAdmin = computed(() => this._user()?.roles.includes("admin") ?? false)
   token = computed<string | null>(() => this._token())
 
   login(email: string, password: string): Observable<boolean> {
