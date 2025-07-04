@@ -15,18 +15,19 @@ interface Options {
 export class ProductsService {
   private http = inject(HttpClient)
 
-  private productCache = new Map<string, ProductsResponse | Product>()
+  private productsCache = new Map<string, ProductsResponse>()
+  private productCache = new Map<string, Product>
 
   getProducts(options: Options): Observable<ProductsResponse> {
     const { limit = 10, offset = 0, gender = '' } = options;
     const key = `${limit}-${offset}-${gender}`
     if (this.productCache.has(key)) {
-      return of(this.productCache.get(key) as ProductsResponse);
+      return of(this.productsCache.get(key) as ProductsResponse);
     }
     return this.http.get<ProductsResponse>(`${apiUrl}/products`, {
       params: { limit, offset, gender }
     }).pipe(
-      tap(resp => this.productCache.set(key, resp))
+      tap(resp => this.productsCache.set(key, resp))
     )
   }
 
@@ -46,6 +47,18 @@ export class ProductsService {
     return this.http.get<Product>(`${apiUrl}/products/${id}`).pipe(
       tap(resp => this.productCache.set(id, resp))
     )
+  }
+
+  updateProduct(productLike: Partial<Product>): Observable<Product> {
+    const id = productLike.id!
+    return this.http.patch<Product>(`${apiUrl}/products/${id}`, productLike).pipe(
+      tap(resp => this.updateProductCache(resp))
+    )
+  }
+
+  updateProductCache(product: Product) {
+    const id = product.id
+    this.productCache.set(id, product)
   }
 
 }

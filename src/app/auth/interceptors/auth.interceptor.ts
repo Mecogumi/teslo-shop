@@ -6,9 +6,9 @@ const apiUrl = environment.baseUrl
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = inject(AuthService).token()
-  if (req.url != `${apiUrl}/auth/check-status`) {
-    return next(req)
-  }
+  // if (req.url != `${apiUrl}/auth/check-status` || req.url!=`${apiUrl}/api/product`) {
+  //   return next(req)
+  // }
   const newRequest = req.clone({
     headers: req.headers.append('Authorization', `Bearer ${token}`)
   })

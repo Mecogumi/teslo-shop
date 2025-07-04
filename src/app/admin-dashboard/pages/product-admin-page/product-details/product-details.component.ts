@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angu
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductCarouselComponent } from '@products/components/product-carousel/product-carousel.component';
 import { Product } from '@products/interfaces/product-response.interface';
+import { ProductsService } from '@products/services/products.service';
 import { FormUtils } from '@utils/form.utils';
 
 
@@ -16,6 +17,7 @@ export class ProductDetailsComponent implements OnInit {
   sizes = ["L", "M", "S", "XL", "XS", "XXL"]
   product = input.required<Product>()
   formUtils = FormUtils
+  productService = inject(ProductsService)
 
   fb = inject(FormBuilder)
   productForm = this.fb.group({
@@ -40,10 +42,6 @@ export class ProductDetailsComponent implements OnInit {
     this.productForm.patchValue({ tags: formLike.tags?.join(",") })
   }
 
-  onSumbit() {
-    console.log(this.productForm.value)
-
-  }
 
   onSizeClicked(size: string) {
     const currentSizes = this.productForm.value.sizes ?? [];
@@ -55,4 +53,20 @@ export class ProductDetailsComponent implements OnInit {
     }
     this.productForm.patchValue({ sizes: currentSizes })
   }
+
+  onSumbit() {
+    if (this.productForm.invalid) {
+      this.productForm.markAllAsTouched()
+      return
+    }
+    const formValue = this.productForm.value
+    const productLike: Partial<Product> = {
+      ...(formValue as any),
+      tags: formValue.tags?.toLowerCase().split(',').map(tag => tag.trim()) ?? [],
+      id: this.product().id
+    }
+    console.log(productLike)
+    this.productService.updateProduct(productLike).subscribe()
+  }
+
 }
